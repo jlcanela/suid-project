@@ -1,0 +1,36 @@
+{
+    "components": [
+      {
+        "type": "text",
+        "text": "# Add New Project"
+      },
+      {
+        "key": "name",
+        "label": "Name",
+        "type": "textfield",
+        "validate": {
+          "required": true
+        },
+        "layout": {
+          "columns": 16,
+          "row": "Row_1"
+        }
+      },
+      {
+        "key": "description",
+        "label": "Description",
+        "type": "textfield",
+        "layout": {
+          "columns": 16,
+          "row": "Row_1"
+        }
+      },
+      {
+        "key": "submit",
+        "label": "Submit",
+        "type": "button"
+      }
+    ],
+    "type": "default"
+  }
+  

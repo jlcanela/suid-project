@@ -1,0 +1,45 @@
+{
+  "name": "suid-project",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "start": "vite",
+    "generate": "graphql-codegen --config codegen.ts --watch",
+    "schema": "get-graphql-schema http://localhost:8080/v1/graphql -h 'x-hasura-admin-secret=kAQ4hW8xJeyMICatUx7gvTGM' > project-schema.graphql"
+  },
+  "dependencies": {
+    "@bpmn-io/form-js": "^1.10.1",
+    "@felte/solid": "^1.2.13",
+    "@felte/validator-zod": "^1.0.17",
+    "@modular-forms/solid": "^0.23.0",
+    "@solidjs/router": "^0.14.7",
+    "@suid/icons-material": "^0.8.1",
+    "@suid/material": "^0.18.0",
+    "@tanstack/solid-query": "^5.59.0",
+    "@tanstack/solid-query-devtools": "^5.59.0",
+    "@tanstack/solid-table": "^8.20.5",
+    "ag-grid-community": "^32.1.1",
+    "ag-grid-solid": "^31.1.1",
+    "graphql-request": "^7.1.0",
+    "solid-devtools": "^0.30.1",
+    "solid-js": "^1.9.1",
+    "solid-transition-group": "^0.2.3",
+    "valibot": "1.0.0-beta.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@0no-co/graphqlsp": "^1.12.16",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset-swc-plugin": "^0.2.0",
+    "@graphql-codegen/schema-ast": "^4.1.0",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-operations": "^4.2.3",
+    "@parcel/watcher": "^2.4.1",
+    "@suid/vite-plugin": "^0.3.1",
+    "get-graphql-schema": "^2.1.2",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8",
+    "vite-plugin-solid": "^2.10.2"
+  }
+}

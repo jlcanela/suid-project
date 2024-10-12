@@ -1,0 +1,141 @@
+import { createSignal, Show, For } from 'solid-js';
+import { createForm } from '@felte/solid';
+import { validator } from '@felte/validator-zod';
+import { z, ZodEffects, ZodNullable, ZodObject, ZodOptional, ZodType, ZodTypeAny } from 'zod';
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@suid/material';
+
+// Function to extract the underlying shape of a Zod schema
+function getSchemaShape(schema: ZodTypeAny): ZodObject<any> | undefined {
+  if (schema instanceof z.ZodEffects) {
+    return schema._def.schema as ZodObject<any>;
+  }
+  if (schema instanceof z.ZodObject) {
+    return schema;
+  }
+  return undefined;
+}
+
+function getInnerType(schema: ZodTypeAny): ZodTypeAny {
+  if (schema instanceof ZodOptional || schema instanceof ZodNullable) {
+    return schema.unwrap();
+  }
+  if (schema instanceof ZodEffects) {
+    return schema.innerType();
+  }
+  return schema;
+}
+
+function fetchType<T extends ZodTypeAny>(field: T) {
+  console.log('describe:', getInnerType(field).);
+
+  if (field.isOptional()) {
+    return { optional: true, field: field.unwrap()};
+  } else {
+    return { optional: false, field: field};
+
+  }
+}
+
+function genForm<T extends ZodTypeAny>(schema: T) {
+  const { form, errors } = createForm({
+    extend: validator({ schema }),
+    onSubmit: (values) => {
+      console.log('Form submitted:', values);
+    },
+  });
+
+  // Get the shape of the schema
+  const shape = getSchemaShape(schema)?.shape;
+  
+  if (!shape) {
+    throw new Error("The provided schema does not have a valid shape.");
+  }
+
+  const fields = Object.keys(shape);
+  const [type, setType] = createSignal('number');
+
+  console.log(shape);
+  return (
+    <form use:form>
+      <For each={fields}>
+        {(fieldName) => {
+          const fieldDef = shape[fieldName];
+          const {optional, field} = fetchType(fieldDef);
+          console.log(optional, field);
+          return (
+          <Show when={fieldName === 'type'}>
+            <FormControl fullWidth variant="outlined" margin="normal">
+              <InputLabel id="type-select-label">Type</InputLabel>
+              <Select
+                labelId="type-select-label"
+                value={type()}
+                onChange={(event) => setType(event.target.value)}
+                label="Type"
+              >
+                <MenuItem value="number">Number</MenuItem>
+                <MenuItem value="string">String</MenuItem>
+              </Select>
+            </FormControl>
+          </Show>
+        )}}
+      </For>
+
+      <Show when={type() === 'number'}>
+        <TextField
+          name="n"
+          label="N"
+          type="number"
+          error={!!errors()['n']}
+          helperText={errors()['n']?.join(', ') || ''}
+          variant="outlined"
+          fullWidth
+          margin="normal"
+        />
+      </Show>
+
+      <Show when={type() === 'string'}>
+        <TextField
+          name="s"
+          label="S"
+          type="text"
+          error={!!errors()['s']}
+          helperText={errors()['s']?.join(', ') || ''}
+          variant="outlined"
+          fullWidth
+          margin="normal"
+        />
+      </Show>
+
+      <Button type="submit" variant="contained" color="primary" fullWidth>
+        Submit
+      </Button>
+    </form>
+  );
+}
+
+// Example schema with conditional logic using superRefine
+const ConditionalSchema = z.object({
+  type: z.enum(['number', 'string']),
+  n: z.number().optional(),
+  s: z.string().optional(),
+}).superRefine((data, ctx) => {
+  if (data.type === 'number' && typeof data.n !== 'number') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['n'],
+      message: 'Field "n" is required and must be a number when type is "number".',
+    });
+  }
+  if (data.type === 'string' && typeof data.s !== 'string') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['s'],
+      message: 'Field "s" is required and must be a string when type is "string".',
+    });
+  }
+});
+
+// Usage
+export default function LoginForm() {
+  return genForm(ConditionalSchema);
+}
