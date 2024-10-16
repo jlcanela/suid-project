@@ -38,7 +38,7 @@ export function CustomAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ mr: 2 }}>
-            Main Application
+            MainApp
           </Typography>
           <Button color="inherit" href="/">Home</Button>
           <Button color="inherit" href="/projects">Projects</Button>

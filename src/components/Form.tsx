@@ -1,30 +1,36 @@
-import { Box, Typography, Button, Container } from "@suid/material";
 import { Form, Schema } from "@bpmn-io/form-js";
 import { onMount } from "solid-js";
 
 
-type OnSubmitCallback = (event: any) => void;
+type OnSubmitCallback = (data: any, errors: any) => void;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // Define the createForm function with TypeScript
-export function createForm(container: HTMLElement, schema: Schema, onSubmit: OnSubmitCallback): void {
+export function createForm(container: HTMLElement, schema: Schema, data: any, onSubmit: OnSubmitCallback): void {
   const form = new Form({
     container: container,
   });
 
-  form.importSchema(schema).then(() => {
+  form.importSchema(schema, data).then(() => {
     form.on("submit", (event) => {
-      onSubmit(event);
+      onSubmit(event, undefined);
     });
   });
 }
 
+export function hasErrors(errors: Record<string, any>): boolean {
+  return Object.keys(errors).length > 0;
+}
 
-function BpmnForm({ schema, onSubmit }: { schema: Schema; onSubmit: OnSubmitCallback }) {
+function BpmnForm({ schema, data, onSubmit }: { schema: Schema; data: any, onSubmit: OnSubmitCallback }) {
     let formContainer!: HTMLDivElement; // Use non-null assertion to indicate that this will be assigned
   
     onMount(() => {
       // Use the createForm method
-      createForm(formContainer, schema, onSubmit);
+      createForm(formContainer, schema, data, onSubmit);
     });
   
     return (

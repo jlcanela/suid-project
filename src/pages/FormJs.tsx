@@ -7,7 +7,7 @@ const onSubmit =  (data, errors) => {
   console.log(data, errors);
 };
   return (
-   <BpmnForm schema={formSchema} onSubmit={onSubmit}/>
+   <BpmnForm schema={formSchema} data={{}} onSubmit={onSubmit}/>
   );
 }
 
