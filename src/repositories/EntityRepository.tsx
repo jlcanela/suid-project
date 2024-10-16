@@ -44,20 +44,12 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
         this.createMutationInstance = this.createGraphQLMutation<TCreateInput, any>(this.createDocument);
         this.updateMutationInstance = this.createGraphQLMutation<TUpdateInput, any>(this.updateDocument);
         this.deleteMutationInstance = this.createGraphQLMutation<TDeleteInput, any>(this.deleteDocument);
-        this.findAllQueryInstance = () => {
-            const config = {
-                "url": "http://localhost:8080/v1/graphql",
-                "requestHeaders": {
-                  "x-hasura-admin-secret": "kAQ4hW8xJeyMICatUx7gvTGM"
-                }
-              }
-            return ({
+        this.findAllQueryInstance = () => ({
             queryKey: [this.entityKey],
             queryFn: async () => {
                 try {
                     return await request({
-                      //...graphQLConfig,
-                      ...config,
+                      ...graphQLConfig,
                       document: this.findAllDocument,
                     });                    
                 } catch(err) {
@@ -66,7 +58,6 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
                 }
             },
           });
-        } 
         this.findOneQueryInstance = (input) => () => ({
             queryKey: [this.entityKey, input],
             queryFn: async () =>

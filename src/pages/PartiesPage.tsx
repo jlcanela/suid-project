@@ -11,31 +11,8 @@ import { PartyRepository } from "../repositories/PartyRepository";
 import { PartiesQuery, ProjectsQuery } from "../gql/graphql";
 import { CreateQueryResult } from "@tanstack/solid-query";
 import EntityTable from "../components/EntityTable";
+import AddEntityModal from "../components/AddEntityModal";
 
-
-function ProjectsTable() {
-
-  type Project = ArrayElement<ProjectsQuery["projects"]>;
-
-  const repo = new ProjectRepository();
-  const q: CreateQueryResult<ProjectsQuery, Error> = repo.findAll({});
-  const onDelete = (id: number) => {
-    repo.delete({id});
-  };
-
-  return (
-    <EntityTable<ProjectsQuery, Project, number> 
-      columnNames={["id", "name", "description"]} 
-      path="/projects"
-      prepareDeleteMessage={(p: Project) => p ? `Are you sure you want to delete project '${p.name}' ?`: 'Are you sure ?' }
-      fetch_id={ (p: Project) => p.id }
-      query={q}
-      fetch_data={q => q.data.projects}
-      deleteEntity={onDelete}
-    />
-  );
-
-}
 
 function PartiesTable() {
 
@@ -61,7 +38,14 @@ function PartiesTable() {
 
 }
 
-function PartiesPage() {
+function AddPartyModal() {
+  const repository = new PartyRepository();
+  return (
+    <AddEntityModal title="Add Project" schema={formSchema} create={repository.create.bind(repository) }/>
+  );
+}
+
+export default function PartiesPage() {
   return (
     <>
       <div>
@@ -70,34 +54,5 @@ function PartiesPage() {
        <PartiesTable/>
       </div>
     </>
-  );
-}
-
-export default PartiesPage;
-
-function AddPartyModal() {
-  const repository = new PartyRepository();
-  const [showModal, setShowModal] = createSignal(false);
-  const handleShow = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (hasErrors(event.errors)) {
-    } else {
-      repository.create(event.data);
-      handleClose();
-    }
-  };
-
-  return (
-    <div>
-      <Button variant="contained" color="primary" onClick={handleShow}>
-        Add Party
-      </Button>
-      <Dialog open={showModal()} onClose={handleClose}>
-        <BpmnForm schema={formSchema} data={{}} onSubmit={handleSubmit} />
-      </Dialog>
-    </div>
   );
 }

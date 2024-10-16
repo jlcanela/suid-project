@@ -8,15 +8,11 @@ import {
 } from "../gql/graphql";
 
 import { graphql } from "../gql";
-import { request } from "graphql-request";
-import graphQLConfig from './GraphQLConfig.json';
 
 import {
-  createMutation,
-  createQuery,
   CreateQueryResult,
-  useQueryClient,
 } from "@tanstack/solid-query";
+import { EntityRepository } from "./EntityRepository";
 
 const PROJECT_FIND_ALL = graphql(`
     query Projects {
@@ -28,7 +24,7 @@ const PROJECT_FIND_ALL = graphql(`
     }
   `);
 
-const PROJECT_FIND = graphql(`
+const PROJECT_FIND_ONE = graphql(`
   query Project($id: Int!) {
     projects_by_pk(id: $id) {
       id
@@ -72,108 +68,22 @@ const DELETE_PROJECT = graphql(`
   }
 `);
 
-type ProjectFindInput = ProjectsQueryVariables;
-type ProjectFindOutput = CreateQueryResult<ProjectsQuery, Error>;
-type ProjectFindOneInput = string;
-type ProjectFindOneOutput = CreateQueryResult<ProjectQuery, Error>;
-type ProjectCreateInput = CreateProjectMutation["insert_projects_one"];
-type ProjectCreateOutput = void;
-type ProjectUpdateInput = UpdateProjectMutation["update_projects_by_pk"];
-type ProjectUpdateOutput = void;
-type ProjectDeleteInput = DeleteProjectMutation["delete_projects_by_pk"];
-type ProjectDeleteOutput = void;
+
 export type ProjectId = ProjectsQuery["projects"]
 
-export interface ProjectDatasource {
-  findOne: (input: ProjectFindOneInput) => ProjectFindOneOutput;
-  findAll: (input: ProjectFindInput) => ProjectFindOutput;
-  create: (input: ProjectCreateInput) => ProjectCreateOutput;
-  update: (input: ProjectUpdateInput) => ProjectUpdateOutput;
-  delete: (input: ProjectDeleteInput) => ProjectDeleteOutput;
-}
-
-export class ProjectRepository implements ProjectDatasource {
-
-  queryClient = useQueryClient();
-
-  createGraphQLMutation<TVariables, TData>(
-    document: any,
-    variablesMapper: (variables: TVariables) => Record<string, any> = (
-      variables: TVariables
-    ) => variables
-  ) {
-    return createMutation(() => ({
-      mutationFn: (variables: TVariables) => {
-        return request({
-          ...graphQLConfig,
-          document,
-          variables: variablesMapper(variables),
-        });
-      },
-      onSuccess: () => {
-        this.queryClient.resetQueries({ queryKey: ["projects"] });
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    }));
-  }
-
-  findAll(input: ProjectFindInput): ProjectFindOutput {
-    return createQuery(() => ({
-      queryKey: ["projects"],
-      queryFn: async () =>
-        await request({
-          ...graphQLConfig,
-          document: PROJECT_FIND_ALL,
-        }),
-    }));
-  }
-
-  findOne(input: ProjectFindOneInput): ProjectFindOneOutput {
-    return createQuery(() => ({
-      queryKey: ["projects", input],
-      queryFn: async () =>
-        await request<ProjectQuery>({
-          ...graphQLConfig,
-          document: PROJECT_FIND,
-          variables: { id: parseInt(input) },
-        }),
-    }));
-  }
-
-  protected createProjectMutation = this.createGraphQLMutation<
-    ProjectCreateInput,
-    CreateProjectMutation
-  >(CREATE_PROJECT, (variables) => ({
-    name: variables.name,
-    description: variables.description,
-    owner: 1,
-  }));
-
-  create(input: ProjectCreateInput): ProjectCreateOutput {
-    this.createProjectMutation.mutate(input);
-  }
-
-  protected updateProjectMutation = this.createGraphQLMutation<
+export class ProjectRepository extends EntityRepository<
+    ProjectsQueryVariables, CreateQueryResult<ProjectsQuery, Error>, 
+    string, CreateQueryResult<ProjectQuery, Error>, 
+    CreateProjectMutation["insert_projects_one"], 
     UpdateProjectMutation["update_projects_by_pk"],
-    DeleteProjectMutation
-  >(UPDATE_PROJECT, (variables) => ({
-    id: variables.id,
-    name: variables.name,
-    description: variables.description,
-  }));
+    DeleteProjectMutation["delete_projects_by_pk"]> {
 
-  update(input: ProjectUpdateInput): ProjectUpdateOutput {
-    this.updateProjectMutation.mutate(input);
+    constructor() {
+      super(PROJECT_FIND_ALL, PROJECT_FIND_ONE, CREATE_PROJECT, UPDATE_PROJECT, DELETE_PROJECT, "projects");
+    }
+
+    create(input: CreateProjectMutation["insert_projects_one"]): void {
+      super.create({...input, "owner": 1});
+    }
+    
   }
-
-  deleteProjectMutation = this.createGraphQLMutation<
-    DeleteProjectMutation["delete_projects_by_pk"],
-    DeleteProjectMutation
-  >(DELETE_PROJECT, (variables) => ({ id: variables.id }));
-
-  delete(input: ProjectDeleteInput): ProjectCreateOutput {
-    this.deleteProjectMutation.mutate(input);
-  }
-}

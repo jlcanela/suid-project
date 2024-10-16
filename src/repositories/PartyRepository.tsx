@@ -36,8 +36,8 @@ import {
   `);
   
   const CREATE_PARTY = graphql(`
-    mutation CreateParty($first_name: String!, $last_name: String!, $idp_id: String!) {
-      insert_identity_parties_one(object: {first_name: $first_name, last_name: $last_name, idp_id: $idp_id }) {
+    mutation CreateParty($first_name: String!, $last_name: String!) {
+      insert_identity_parties_one(object: {first_name: $first_name, last_name: $last_name, idp_id: "" }) {
         first_name
         last_name
       }
@@ -75,4 +75,5 @@ export class PartyRepository extends EntityRepository<
     constructor() {
       super(PARTY_FIND_ALL, PARTY_FIND_ONE, CREATE_PARTY, UPDATE_PARTY, DELETE_PARTY, "parties");
     }
+
   }

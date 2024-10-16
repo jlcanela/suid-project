@@ -1,14 +1,10 @@
-import { Box, Typography, Button } from "@suid/material";
+import { Typography, Button } from "@suid/material";
 import { useNavigate, useParams, useLocation } from "@solidjs/router";
 import { Match, Switch } from "solid-js";
 import BpmnForm, { hasErrors } from "../components/Form"; // Import the BpmnForm component
 import formSchema from "./PartyDetailEdit.json"; // Import the form schema
-import { ProjectDatasource, ProjectRepository } from "../repositories/ProjectRepository";
 import PageHeader from "../components/PageHeader";
 import { PartyRepository } from "../repositories/PartyRepository";
-
-
-//import { PartyDatasource, PartyRepository } from "../repositories/PartyRepository";
 
 export default function PartyDetailPage() {
   const repository = new PartyRepository();
