@@ -7,9 +7,11 @@ import BpmnForm, { hasErrors } from "../components/Form";
 import PageHeader from "../components/PageHeader";
 import { ArrayElement } from "../components/GeneratedTypesUtils";
 import { ProjectRepository } from "../repositories/ProjectRepository";
-import { ProjectsQuery } from "../gql/graphql";
+import { PartyRepository } from "../repositories/PartyRepository";
+import { PartiesQuery, ProjectsQuery } from "../gql/graphql";
 import { CreateQueryResult } from "@tanstack/solid-query";
 import EntityTable from "../components/EntityTable";
+
 
 function ProjectsTable() {
 
@@ -35,22 +37,46 @@ function ProjectsTable() {
 
 }
 
-function ProjectsPage() {
+function PartiesTable() {
+
+  type Entity = ArrayElement<PartiesQuery["identity_parties"]>;
+
+  const repository = new PartyRepository();
+  const q: CreateQueryResult<PartiesQuery, Error> = repository.findAll({});
+  const onDelete = (id: number) => {
+    repository.delete({party_id: id});
+  };
+
+  return (
+    <EntityTable<PartiesQuery, Entity, number> 
+      columnNames={["party_id", "first_name", "last_name"]} 
+      path="/parties"
+      prepareDeleteMessage={(p: Entity) => p ? `Are you sure you want to delete party '${p.first_name} ${p.last_name}' ?`: 'Are you sure ?' }
+      fetch_id={ (p: Entity) => p.party_id }
+      query={q}
+      fetch_data={q => q.data.identity_parties}
+      deleteEntity={onDelete}
+      />
+  );
+
+}
+
+function PartiesPage() {
   return (
     <>
       <div>
-        <PageHeader title="Projects" />
-        <AddProjectModal />
-       <ProjectsTable/>
+        <PageHeader title="Parties" />
+        <AddPartyModal />
+       <PartiesTable/>
       </div>
     </>
   );
 }
 
-export default ProjectsPage;
+export default PartiesPage;
 
-function AddProjectModal() {
-  const repository = new ProjectRepository();
+function AddPartyModal() {
+  const repository = new PartyRepository();
   const [showModal, setShowModal] = createSignal(false);
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -67,7 +93,7 @@ function AddProjectModal() {
   return (
     <div>
       <Button variant="contained" color="primary" onClick={handleShow}>
-        Add Project
+        Add Party
       </Button>
       <Dialog open={showModal()} onClose={handleClose}>
         <BpmnForm schema={formSchema} data={{}} onSubmit={handleSubmit} />
@@ -75,4 +101,3 @@ function AddProjectModal() {
     </div>
   );
 }
-

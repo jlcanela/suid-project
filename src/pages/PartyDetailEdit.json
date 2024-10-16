@@ -1,0 +1,35 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "text": "# Add Party"
+    },
+    {
+      "key": "first_name",
+      "label": "Firstname",
+      "type": "textfield",
+      "validate": {
+        "required": true
+      },
+      "layout": {
+        "columns": 16,
+        "row": "Row_1"
+      }
+    },
+    {
+      "key": "last_name",
+      "label": "Lastname",
+      "type": "textfield",
+      "layout": {
+        "columns": 16,
+        "row": "Row_1"
+      }
+    },
+    {
+      "key": "submit",
+      "label": "Submit",
+      "type": "button"
+    }
+  ],
+  "type": "default"
+}

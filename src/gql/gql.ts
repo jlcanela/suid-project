@@ -13,6 +13,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n      query Parties {\n        identity_parties {\n          party_id\n          first_name\n          last_name\n        }\n      }\n  ": types.PartiesDocument,
+    "\n    query Party($id: Int!) {\n      identity_parties_by_pk(party_id: $id) {\n        party_id\n        first_name\n        last_name\n      }\n    }\n  ": types.PartyDocument,
+    "\n    mutation CreateParty($first_name: String!, $last_name: String!, $idp_id: String!) {\n      insert_identity_parties_one(object: {first_name: $first_name, last_name: $last_name, idp_id: $idp_id }) {\n        first_name\n        last_name\n      }\n    }\n  ": types.CreatePartyDocument,
+    "\n    mutation UpdateParty($party_id: Int!, $first_name: String!, $last_name: String!) {\n      update_identity_parties_by_pk(pk_columns: {party_id: $party_id}, _set: {first_name: $first_name, last_name: $last_name}) {\n        party_id\n        first_name\n        last_name\n      }\n    }\n  ": types.UpdatePartyDocument,
+    "\n    mutation DeleteParty($party_id: Int!) {\n      delete_identity_parties_by_pk(party_id: $party_id) {\n        party_id\n      }\n    }\n  ": types.DeletePartyDocument,
     "\n    query Projects {\n      projects {\n        id\n        name\n        description\n      }\n    }\n  ": types.ProjectsDocument,
     "\n  query Project($id: Int!) {\n    projects_by_pk(id: $id) {\n      id\n      name\n      description\n    }\n  }\n": types.ProjectDocument,
     "\n  mutation CreateProject($name: String!, $description: String!, $owner: Int!) {\n    insert_projects_one(\n      object: { name: $name, description: $description, owner: $owner }\n    ) {\n      id\n      name\n      description\n      owner\n    }\n  }\n": types.CreateProjectDocument,
@@ -34,6 +39,26 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      query Parties {\n        identity_parties {\n          party_id\n          first_name\n          last_name\n        }\n      }\n  "): (typeof documents)["\n      query Parties {\n        identity_parties {\n          party_id\n          first_name\n          last_name\n        }\n      }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query Party($id: Int!) {\n      identity_parties_by_pk(party_id: $id) {\n        party_id\n        first_name\n        last_name\n      }\n    }\n  "): (typeof documents)["\n    query Party($id: Int!) {\n      identity_parties_by_pk(party_id: $id) {\n        party_id\n        first_name\n        last_name\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation CreateParty($first_name: String!, $last_name: String!, $idp_id: String!) {\n      insert_identity_parties_one(object: {first_name: $first_name, last_name: $last_name, idp_id: $idp_id }) {\n        first_name\n        last_name\n      }\n    }\n  "): (typeof documents)["\n    mutation CreateParty($first_name: String!, $last_name: String!, $idp_id: String!) {\n      insert_identity_parties_one(object: {first_name: $first_name, last_name: $last_name, idp_id: $idp_id }) {\n        first_name\n        last_name\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation UpdateParty($party_id: Int!, $first_name: String!, $last_name: String!) {\n      update_identity_parties_by_pk(pk_columns: {party_id: $party_id}, _set: {first_name: $first_name, last_name: $last_name}) {\n        party_id\n        first_name\n        last_name\n      }\n    }\n  "): (typeof documents)["\n    mutation UpdateParty($party_id: Int!, $first_name: String!, $last_name: String!) {\n      update_identity_parties_by_pk(pk_columns: {party_id: $party_id}, _set: {first_name: $first_name, last_name: $last_name}) {\n        party_id\n        first_name\n        last_name\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation DeleteParty($party_id: Int!) {\n      delete_identity_parties_by_pk(party_id: $party_id) {\n        party_id\n      }\n    }\n  "): (typeof documents)["\n    mutation DeleteParty($party_id: Int!) {\n      delete_identity_parties_by_pk(party_id: $party_id) {\n        party_id\n      }\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

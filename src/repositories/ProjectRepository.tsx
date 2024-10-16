@@ -82,6 +82,7 @@ type ProjectUpdateInput = UpdateProjectMutation["update_projects_by_pk"];
 type ProjectUpdateOutput = void;
 type ProjectDeleteInput = DeleteProjectMutation["delete_projects_by_pk"];
 type ProjectDeleteOutput = void;
+export type ProjectId = ProjectsQuery["projects"]
 
 export interface ProjectDatasource {
   findOne: (input: ProjectFindOneInput) => ProjectFindOneOutput;
@@ -92,6 +93,7 @@ export interface ProjectDatasource {
 }
 
 export class ProjectRepository implements ProjectDatasource {
+
   queryClient = useQueryClient();
 
   createGraphQLMutation<TVariables, TData>(
@@ -108,7 +110,7 @@ export class ProjectRepository implements ProjectDatasource {
           variables: variablesMapper(variables),
         });
       },
-      onSuccess: (data: TData, vars, context) => {
+      onSuccess: () => {
         this.queryClient.resetQueries({ queryKey: ["projects"] });
       },
       onError: (err) => {

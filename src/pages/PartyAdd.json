@@ -2,11 +2,11 @@
     "components": [
       {
         "type": "text",
-        "text": "# Edit Project"
+        "text": "# Add New Project"
       },
       {
-        "key": "name",
-        "label": "Name",
+        "key": "first_name",
+        "label": "Firstname",
         "type": "textfield",
         "validate": {
           "required": true
@@ -17,8 +17,8 @@
         }
       },
       {
-        "key": "description",
-        "label": "Description",
+        "key": "last_name",
+        "label": "Lastname",
         "type": "textfield",
         "layout": {
           "columns": 16,
@@ -33,3 +33,4 @@
     ],
     "type": "default"
   }
+  

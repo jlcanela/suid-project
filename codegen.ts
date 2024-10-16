@@ -4,7 +4,7 @@ const config: CodegenConfig = {
   schema: 'project-schema.graphql',
   //https://swapi-graphql.netlify.app/.netlify/functions/index',
   documents: ['src/**/*.tsx', 'src/**/*.graphql'],
-  ignoreNoDocuments: true,
+  ignoreNoDocuments: false,
   generates: {
     './src/gql/': {
       preset: 'client',

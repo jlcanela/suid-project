@@ -19,7 +19,9 @@ import {
     getCoreRowModel,
     ColumnDef,
     createSolidTable,
+    CellContext,
   } from "@tanstack/solid-table";
+import { ArrayElement } from "./GeneratedTypesUtils";
   
   interface CustomTableProps<T> {
     data: T[];
@@ -36,30 +38,6 @@ import {
       getCoreRowModel: getCoreRowModel(),
     });
   
-    // <TableContainer component={Paper}>
-  
-    //               <TableCell>
-    //                 <IconButton
-    //                   onClick={() => viewProject(project.id)}
-    //                   aria-label="view"
-    //                 >
-    //                   <VisibilityIcon />
-    //                 </IconButton>
-    //                 <IconButton
-    //                   onClick={() => editProject(project.id)}
-    //                   aria-label="edit"
-    //                 >
-    //                   <EditIcon />
-    //                 </IconButton>
-    //                 <IconButton
-    //                   onClick={() => deleteProject(project.id)}
-    //                   aria-label="delete"
-    //                 >
-    //                   <DeleteIcon />
-    //                 </IconButton>
-    //               </TableCell>
-    //             </TableRow>
-    //           ))}
     return (
       <>
         <TableContainer component={Paper}>
@@ -132,7 +110,7 @@ import {
     );
   }
 
-  export function makeColumnDef<T>(col: string): ColumnDef<T> {
+  export function makeColumnDef<TData, TValue>(col: string): ColumnDef<TData, TValue> {
     return ({
       accessorKey: col,
       cell: (info) => info.getValue(),
@@ -141,41 +119,41 @@ import {
   
   }
 
-  interface HasId {
-    id: number
-  };
-
-  export function makeActionColumn<T extends HasId >(path: string, handleDelete: (id: number) => any): ColumnDef<T> {
+  export function makeActionColumn<TData, TValue>(path: string, handleDelete: (id: number) => any, fetch_id: (row: TData) => string): ColumnDef<TData, TValue> {
+  //
     return ({
       accessorKey: "action",
-      cell: (info) => (
+      cell: (info) => {
+        const id =  fetch_id(info.row.original);
+        return (
         <div>
-          <a href={`${path}/${info.row.original.id}`}>
+          <a href={`${path}/${id}`}>
             <IconButton aria-label="view">
               <VisibilityIcon />
             </IconButton>
           </a>
-          <a href={`${path}/${info.row.original.id}/edit`}>
+          <a href={`${path}/${id}/edit`}>
             <IconButton aria-label="edit">
               <EditIcon />
             </IconButton>
           </a>
           <IconButton
             aria-label="delete"
-            onClick={() => handleDelete(info.row.original.id)}
+            onClick={() => handleDelete(parseInt(id))}
           >
             <DeleteIcon />
           </IconButton>
         </div>
-      ),
+      )},
       footer: (info) => info.column.id,
     });
 }
 
-export function makeColumnDefs<T extends HasId>(cols: string[], path: string, handleDelete: (id: number) => any): ColumnDef<T>[] {
-    const columnDefs: ColumnDef<T>[] = cols.map(makeColumnDef<T>);
   
-    const actionColumnDef: ColumnDef<T> = makeActionColumn<T>(path, handleDelete);
+export function makeColumnDefs<TData, TValue>(cols: string[], path: string, handleDelete: (id: number) => any, fetch_id: (row: TData) => string): ColumnDef<TData, TValue>[] {
+    const columnDefs: ColumnDef<TData, TValue>[] = cols.map(makeColumnDef<TData, TValue>);
+  
+    const actionColumnDef: ColumnDef<TData, TValue> = makeActionColumn<TData, TValue>(path, handleDelete, fetch_id);
   
     return [...columnDefs, actionColumnDef];
   }

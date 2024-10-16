@@ -1,0 +1,165 @@
+import {
+  CreatePartyMutation,
+  PartiesQuery,
+  PartiesQueryVariables,
+  DeletePartyMutation,
+  UpdatePartyMutation,
+  PartyQuery,
+} from "../gql/graphql";
+
+import { graphql } from "../gql";
+import { request } from "graphql-request";
+import graphQLConfig from './GraphQLConfig.json';
+
+import {
+  createMutation,
+  createQuery,
+  CreateQueryResult,
+  useQueryClient,
+} from "@tanstack/solid-query";
+
+const PARTY_FIND_ALL = graphql(`
+    query Parties {
+      identity_parties {
+        party_id
+        first_name
+        last_name
+      }
+    }
+`);
+
+const PARTY_FIND = graphql(`
+  query Party($id: Int!) {
+    identity_parties_by_pk(party_id: $id) {
+      party_id
+      first_name
+      last_name
+    }
+  }
+`);
+
+const CREATE_PARTY = graphql(`
+  mutation CreateParty($first_name: String!, $last_name: String!, $idp_id: String!) {
+    insert_identity_parties_one(object: {first_name: $first_name, last_name: $last_name, idp_id: $idp_id }) {
+      first_name
+      last_name
+    }
+  }
+`);
+
+const UPDATE_PARTY = graphql(`
+  mutation UpdateParty($party_id: Int!, $first_name: String!, $last_name: String!) {
+    update_identity_parties_by_pk(pk_columns: {party_id: $party_id}, _set: {first_name: $first_name, last_name: $last_name}) {
+      party_id
+      first_name
+      last_name
+    }
+  }
+`);
+
+const DELETE_PARTY = graphql(`
+  mutation DeleteParty($party_id: Int!) {
+    delete_identity_parties_by_pk(party_id: $party_id) {
+      party_id
+    }
+  }
+`);
+
+type PartyFindInput = PartiesQueryVariables;
+type PartyFindOutput = CreateQueryResult<PartiesQuery, Error>;
+type PartyFindOneInput = string;
+type PartyFindOneOutput = CreateQueryResult<PartyQuery, Error>;
+type PartyCreateInput = CreatePartyMutation["insert_identity_parties_one"];
+type PartyCreateOutput = void;
+type PartyUpdateInput = UpdatePartyMutation["update_identity_parties_by_pk"];
+type PartyUpdateOutput = void;
+type PartyDeleteInput = DeletePartyMutation["delete_identity_parties_by_pk"];
+type PartyDeleteOutput = void;
+export type PartyId = PartiesQuery["identity_parties"]
+
+export interface PartyDatasource {
+  findOne: (input: PartyFindOneInput) => PartyFindOneOutput;
+  findAll: (input: PartyFindInput) => PartyFindOutput;
+  create: (input: PartyCreateInput) => PartyCreateOutput;
+  update: (input: PartyUpdateInput) => PartyUpdateOutput;
+  delete: (input: PartyDeleteInput) => PartyDeleteOutput;
+}
+
+export class PartyRepository implements PartyDatasource {
+  
+  queryClient = useQueryClient();
+
+  createGraphQLMutation<TVariables, TData>(
+    document: any,
+    variablesMapper: (variables: TVariables) => Record<string, any> = (
+      variables: TVariables
+    ) => variables
+  ) {
+    return createMutation(() => ({
+      mutationFn: (variables: TVariables) => {
+        return request({
+          ...graphQLConfig,
+          document,
+          variables: variablesMapper(variables),
+        });
+      },
+      onSuccess: (data: TData, vars, context) => {
+        this.queryClient.resetQueries({ queryKey: ["parties"] });
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }));
+  }
+
+  findAll(input: PartyFindInput): PartyFindOutput {
+    console.log("Repo1 / PARTY_FIND_ALL", PARTY_FIND_ALL);
+    return createQuery(() => ({
+      queryKey: ["parties"],
+      queryFn: async () =>
+        await request({
+          ...graphQLConfig,
+          document: PARTY_FIND_ALL,
+        }),
+    }));
+  }
+
+  findOne(input: PartyFindOneInput): PartyFindOneOutput {
+    return createQuery(() => ({
+      queryKey: ["parties", input],
+      queryFn: async () =>
+        await request<PartyQuery>({
+          ...graphQLConfig,
+          document: PARTY_FIND,
+          variables: { id: parseInt(input) },
+        }),
+    }));
+  }
+
+  protected createPartyMutation = this.createGraphQLMutation<
+    PartyCreateInput,
+    CreatePartyMutation
+  >(CREATE_PARTY);
+  
+  create(input: PartyCreateInput): PartyCreateOutput {
+    this.createPartyMutation.mutate(input);
+  }
+
+  protected updatePartyMutation = this.createGraphQLMutation<
+    UpdatePartyMutation["update_identity_parties_by_pk"],
+    DeletePartyMutation
+  >(UPDATE_PARTY);
+
+  update(input: PartyUpdateInput): PartyUpdateOutput {
+    this.updatePartyMutation.mutate(input);
+  }
+
+  deletePartyMutation = this.createGraphQLMutation<
+    DeletePartyMutation["delete_identity_parties_by_pk"],
+    DeletePartyMutation
+  >(DELETE_PARTY);
+
+  delete(input: PartyDeleteInput): PartyCreateOutput {
+    this.deletePartyMutation.mutate(input);
+  }
+}
