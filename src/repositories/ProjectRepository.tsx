@@ -31,6 +31,17 @@ const PROJECT_FIND_ONE = graphql(`
       name
       description
     }
+    identity_parties {
+      first_name
+      last_name
+      party_id
+      party_roles {
+        role_type {
+         value
+          description
+       }
+      }
+    }
   }
 `);
 

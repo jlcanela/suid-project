@@ -6,6 +6,7 @@ import { ProjectsQuery } from "../gql/graphql";
 import { CreateQueryResult } from "@tanstack/solid-query";
 import EntityTable from "../components/EntityTable";
 import AddEntityModal from "../components/AddEntityModal";
+import { Box } from "@suid/material";
 
 function ProjectsTable() {
 

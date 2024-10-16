@@ -41,7 +41,7 @@ function PartiesTable() {
 function AddPartyModal() {
   const repository = new PartyRepository();
   return (
-    <AddEntityModal title="Add Project" schema={formSchema} create={repository.create.bind(repository) }/>
+    <AddEntityModal title="Add Party" schema={formSchema} create={repository.create.bind(repository) }/>
   );
 }
 

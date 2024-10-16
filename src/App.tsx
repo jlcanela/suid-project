@@ -21,7 +21,12 @@ export function App() {
   <QueryClientProvider client={queryClient}>
   <SolidQueryDevtools />
       <CustomAppBar />
-      <Box sx={{ margin: 2 }}>
+      <Box 
+          sx={{ 
+            maxWidth: '80%', // Set maximum width
+            margin: '30px auto',   // Center the box
+          }}
+        >
         <Router>
           <Route path="/" component={Home} />
           <Route path="/features" component={Features} />
