@@ -2,7 +2,7 @@
   "components": [
     {
       "type": "text",
-      "text": "# Add Party"
+      "text": "# Update Party"
     },
     {
       "key": "first_name",

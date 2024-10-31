@@ -44,29 +44,8 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
         this.createMutationInstance = this.createGraphQLMutation<TCreateInput, any>(this.createDocument);
         this.updateMutationInstance = this.createGraphQLMutation<TUpdateInput, any>(this.updateDocument);
         this.deleteMutationInstance = this.createGraphQLMutation<TDeleteInput, any>(this.deleteDocument);
-        this.findAllQueryInstance = () => ({
-            queryKey: [this.entityKey],
-            queryFn: async () => {
-                try {
-                    return await request({
-                      ...graphQLConfig,
-                      document: this.findAllDocument,
-                    });                    
-                } catch(err) {
-                    console.log(err);
-                    throw err;
-                }
-            },
-          });
-        this.findOneQueryInstance = (input) => () => ({
-            queryKey: [this.entityKey, input],
-            queryFn: async () =>
-              await request({
-                ...graphQLConfig,
-                document: this.findOneDocument,
-                variables: { id: input },
-              }),
-          });
+        this.findAllQueryInstance = (input) => () => this.createQueryInstance(this.findAllDocument, input);
+        this.findOneQueryInstance = (input) => () => this.createQueryInstance(this.findOneDocument, input);
     }
   
     protected createGraphQLMutation<TVariables, TData>(
@@ -91,9 +70,27 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
         },
       }));
     }
+
+    protected createQueryInstance(document: any, input?: any) {
+      return {
+        queryKey: input ? [this.entityKey, input] : [this.entityKey],
+        queryFn: async () => {
+          try {
+            return await request({
+              ...graphQLConfig,
+              document: document,
+              ...(input && { variables: { id: input } }),
+            });
+          } catch (err) {
+            console.log(err);
+            throw err;
+          }
+        },
+      };
+    }
   
     findAll(input: TFindInput): TFindOutput {
-      return createQuery(this.findAllQueryInstance)  as unknown as TFindOutput;
+      return createQuery(this.findAllQueryInstance())  as unknown as TFindOutput;
     }
   
     findOne(input: TFindOneInput): TFindOneOutput {

@@ -132,11 +132,6 @@ import { ArrayElement } from "./GeneratedTypesUtils";
               <VisibilityIcon />
             </IconButton>
           </a>
-          <a href={`${path}/${id}/edit`}>
-            <IconButton aria-label="edit">
-              <EditIcon />
-            </IconButton>
-          </a>
           <IconButton
             aria-label="delete"
             onClick={() => handleDelete(parseInt(id))}

@@ -20,7 +20,7 @@ function Hero() {
       <Typography variant="h5" component="p" gutterBottom>
         Discover amazing features and enhance your productivity.
       </Typography>
-      <Button variant="contained" color="primary" size="large">
+      <Button variant="contained" color="primary" size="large" sx={{ mt: 4 }}>
         Get Started
       </Button>
     </Box>
