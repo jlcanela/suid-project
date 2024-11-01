@@ -10,6 +10,7 @@ import { Party, PartyRepository, RoleType } from "../repositories/PartyRepositor
 import { Identity_Role_Type_Enum, UpdatePartyRolesMutationVariables } from "../gql/graphql";
 
 import formSchema from "./PartyDetailEdit.json";
+import { useAuth0 } from "../auth";
 
 function PartyDetail({ data, onUpdate }) {
   const [isEditMode, setIsEditMode] = createSignal(false);
@@ -152,7 +153,8 @@ const save = () => {
 }
 
 export default function PartyDetailPage() {
-  const repository = new PartyRepository();
+  const { getToken } = useAuth0();
+  const repository = new PartyRepository(getToken);
 
   const { id } = useParams();
   const navigate = useNavigate();

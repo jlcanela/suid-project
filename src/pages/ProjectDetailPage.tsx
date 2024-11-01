@@ -23,10 +23,12 @@ import StatusMessage from "../components/StatusMessage";
 
 import Toggle from "../components/Toggle";
 import type { Action } from "../components/Toggle";
+import { useAuth0 } from "../auth";
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
-  const repository = new ProjectRepository();
+  const { getToken } = useAuth0();
+  const repository = new ProjectRepository(getToken);
   const navigate = useNavigate();
   const query = repository.findOne(id);
   const assignees: Accessor<ProjectAssignments> = createMemo(

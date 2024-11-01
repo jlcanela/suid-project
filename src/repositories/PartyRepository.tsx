@@ -125,14 +125,15 @@ export class PartyRepository extends EntityRepository<
   UpdatePartyMutation["update_identity_parties_by_pk"],
   DeletePartyMutation["delete_identity_parties_by_pk"]
 > {
-  constructor() {
+  constructor(fetchJwt: () => Promise<string>) {
     super(
+      fetchJwt,
       PARTY_FIND_ALL,
       PARTY_FIND_ONE,
       CREATE_PARTY,
       UPDATE_PARTY,
       DELETE_PARTY,
-      "parties"
+      "parties",
     );
   }
 

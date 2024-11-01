@@ -117,8 +117,9 @@ export class ProjectRepository extends EntityRepository<
   UpdateProjectMutation["update_projects_by_pk"],
   DeleteProjectMutation["delete_projects_by_pk"]
 > {
-  constructor() {
+  constructor(fetchJwt: () => Promise<string>) {
     super(
+      fetchJwt,
       PROJECT_FIND_ALL,
       PROJECT_FIND_ONE,
       CREATE_PROJECT,

@@ -62,6 +62,8 @@ export function NavBar() {
           <Button color="inherit" href="/">
             Home
           </Button>
+          { isAuthenticated() && (
+            <>
           <Button color="inherit" href="/projects">
             Projects
           </Button>
@@ -74,6 +76,8 @@ export function NavBar() {
           <Button color="inherit" href="/formjs">
             FormJs
           </Button>
+            </>
+          )}
 
           <Box sx={{ flexGrow: 1 }} />
           <div>

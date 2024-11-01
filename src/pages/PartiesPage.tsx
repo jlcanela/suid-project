@@ -12,13 +12,15 @@ import { PartiesQuery, ProjectsQuery } from "../gql/graphql";
 import { CreateQueryResult } from "@tanstack/solid-query";
 import EntityTable from "../components/EntityTable";
 import AddEntityModal from "../components/AddEntityModal";
+import { useAuth0 } from "../auth";
 
 
 function PartiesTable() {
 
   type Entity = ArrayElement<PartiesQuery["identity_parties"]>;
+  const { getToken } = useAuth0();
 
-  const repository = new PartyRepository();
+  const repository = new PartyRepository(getToken);
   const q: CreateQueryResult<PartiesQuery, Error> = repository.findAll({});
   const onDelete = (id: number) => {
     repository.delete({party_id: id});
@@ -39,7 +41,8 @@ function PartiesTable() {
 }
 
 function AddPartyModal() {
-  const repository = new PartyRepository();
+  const { getToken } = useAuth0();
+  const repository = new PartyRepository(getToken);
   return (
     <AddEntityModal title="Add Party" schema={formSchema} create={repository.create.bind(repository) }/>
   );

@@ -7,12 +7,14 @@ import { CreateQueryResult } from "@tanstack/solid-query";
 import EntityTable from "../components/EntityTable";
 import AddEntityModal from "../components/AddEntityModal";
 import { Box } from "@suid/material";
+import { useAuth0 } from "../auth";
 
 function ProjectsTable() {
+  const { getToken } = useAuth0();
 
   type Project = ArrayElement<ProjectsQuery["projects"]>;
 
-  const repository = new ProjectRepository();
+  const repository = new ProjectRepository(getToken);
   const q: CreateQueryResult<ProjectsQuery, Error> = repository.findAll({});
   const onDelete = (id: number) => {
     repository.delete({id});
@@ -33,7 +35,9 @@ function ProjectsTable() {
 }
 
 function AddProjectModal() {
-  const repository = new ProjectRepository();
+  const { getToken } = useAuth0();
+
+  const repository = new ProjectRepository(getToken);
   return (
     <AddEntityModal title="Add Project" schema={formSchema} create={repository.create.bind(repository) }/>
   );

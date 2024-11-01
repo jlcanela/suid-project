@@ -1,5 +1,4 @@
   import { request } from "graphql-request";
-  import graphQLConfig from './GraphQLConfig.json';
   
   import {
     createMutation,
@@ -25,8 +24,10 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
     protected deleteMutationInstance;
     protected findAllQueryInstance;
     protected findOneQueryInstance;
+    protected fetchJwt;
 
     constructor(
+      fetchJwt: () => Promise<string>,
       private findAllDocument: any,
       private findOneDocument: any,
       private createDocument: any,
@@ -34,6 +35,7 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
       private deleteDocument: any,
       private entityKey: string
     ) {
+        this.fetchJwt = fetchJwt;
         this.findAllDocument = findAllDocument; 
         this.findOneDocument = findOneDocument;
         this.createDocument = createDocument;
@@ -55,11 +57,14 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
       ) => variables
     ) {
       return createMutation(() => ({
-        mutationFn: (variables: TVariables) => {
+        mutationFn: async (variables: TVariables) => {
           return request({
-            ...graphQLConfig,
+            url: import.meta.env.VITE_GRAPHQL_ENDPOINT,
             document,
             variables: variablesMapper(variables),
+            requestHeaders: {
+              Authorization: `Bearer ${await this.fetchJwt()}`, // Add the JWT token here
+            },
           });
         },
         onSuccess: () => {
@@ -77,8 +82,11 @@ export class EntityRepository<TFindInput, TFindOutput, TFindOneInput, TFindOneOu
         queryFn: async () => {
           try {
             return await request({
-              ...graphQLConfig,
+              url: import.meta.env.VITE_GRAPHQL_ENDPOINT,
               document: document,
+              requestHeaders: {
+                Authorization: `Bearer ${await this.fetchJwt()}`, // Add the JWT token here
+              },
               ...(input && { variables: { id: input } }),
             });
           } catch (err) {
