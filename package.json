@@ -5,6 +5,8 @@
   "scripts": {
     "build": "vite build",
     "start": "vite",
+    "test": "vitest",
+    "preview": "vite preview",
     "generate": "graphql-codegen --config codegen.ts --watch",
     "schema": "get-graphql-schema http://localhost:8080/v1/graphql -h 'x-hasura-admin-secret=kAQ4hW8xJeyMICatUx7gvTGM' > project-schema.graphql"
   },
@@ -39,10 +41,16 @@
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@parcel/watcher": "^2.4.1",
+    "@solidjs/testing-library": "^0.8.10",
     "@suid/vite-plugin": "^0.3.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/user-event": "^14.5.2",
     "get-graphql-schema": "^2.1.2",
+    "jsdom": "^25.0.1",
+    "solid-jest": "^0.2.0",
     "typescript": "^5.6.2",
     "vite": "^5.4.8",
-    "vite-plugin-solid": "^2.10.2"
+    "vite-plugin-solid": "^2.10.2",
+    "vitest": "^2.1.4"
   }
 }

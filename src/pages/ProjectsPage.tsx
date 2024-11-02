@@ -9,7 +9,7 @@ import AddEntityModal from "../components/AddEntityModal";
 import { Box } from "@suid/material";
 import { useAuth0 } from "../auth";
 
-function ProjectsTable() {
+export function ProjectsTable() {
   const { getToken } = useAuth0();
 
   type Project = ArrayElement<ProjectsQuery["projects"]>;
@@ -34,7 +34,7 @@ function ProjectsTable() {
 
 }
 
-function AddProjectModal() {
+export function AddProjectModal() {
   const { getToken } = useAuth0();
 
   const repository = new ProjectRepository(getToken);
