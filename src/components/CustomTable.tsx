@@ -41,7 +41,7 @@ import { ArrayElement } from "./GeneratedTypesUtils";
     return (
       <>
         <TableContainer component={Paper}>
-          <Table aria-label="projects table">
+          <Table aria-label="table">
             <TableHead>
               <For each={table.getHeaderGroups()}>
                 {(headerGroup) => (
