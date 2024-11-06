@@ -20,6 +20,10 @@ import { Auth0 } from './auth';
 import { authConfig } from "./auth/authConfig";
 import Profile from "./pages/Profile";
 import { NavBar } from "./components/NavBar";
+import { SolidFlowSample } from "./pages/SolidFlow";
+import NetworkGraph from "./pages/NetworkGraph";
+import Report from "./pages/Report";
+import BPMNEditor from "./pages/BPMNEditor";
 
 function Layout(props) {
   return (
@@ -64,6 +68,10 @@ export function App() {
             <Route path="/admin" component={Administration} />
             <Route path="/profile" component={Profile} />
             <Route path="/formjs" component={FormJs} />
+            <Route path="/solid-flow" component={SolidFlowSample} />
+            <Route path="/network" component={NetworkGraph} />
+            <Route path="/report" component={Report} />
+            <Route path="/bpmn-editor" component={BPMNEditor} />
           </Router>
       </QueryClientProvider>
   

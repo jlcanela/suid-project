@@ -76,6 +76,18 @@ export function NavBar() {
           <Button color="inherit" href="/formjs">
             FormJs
           </Button>
+          <Button color="inherit" href="/solid-flow">
+            GraphEditor
+          </Button>
+          <Button color="inherit" href="/network">
+            Network
+          </Button>
+          <Button color="inherit" href="/report">
+            Report
+          </Button>
+          <Button color="inherit" href="/bpmn-editor">
+            BPMN Editor
+          </Button>
             </>
           )}
 
