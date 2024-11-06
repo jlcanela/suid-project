@@ -10,7 +10,7 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 export default function BPMNEditor() {
   const [activeTab, setActiveTab] = createSignal(0);
 
-  const tabs = ["Viewer", "Editor", "Other"];
+  const tabs = ["Viewer", "Editor", "Camunda8 Editor"];
 
   const handleTabChange = (event: any, newValue: number) => {
     setActiveTab(newValue);
@@ -38,7 +38,7 @@ export default function BPMNEditor() {
     <Box sx={{ padding: 3 }}>
       {activeTab() === 0 && <div id="canvas" class="with-diagram"><BpmnViewer xmlPath="./pizza-collaboration.bpmn" height={600} /></div>}
       {activeTab() === 1 && <div id="canvas" style="background-color: light-gray"><BpmnModeler xmlPath="./pizza-collaboration.bpmn" height={800}/></div>}
-      {activeTab() === 2 && <Typography>Content for Tab 3</Typography>}
+      {activeTab() === 2 && <div id="canvas" style="background-color: light-gray"><BpmnModeler xmlPath="./process-diagram.bpmn" height={800} camunda={true}/></div>}
     </Box>
   </Box>
     // <Container>

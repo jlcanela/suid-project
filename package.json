@@ -28,6 +28,8 @@
     "ag-grid-solid": "^31.1.1",
     "bpmn-js": "^17.11.1",
     "bpmn-js-properties-panel": "^5.26.0",
+    "camunda-bpmn-js-behaviors": "^1.6.1",
+    "camunda-bpmn-moddle": "^7.0.1",
     "d3": "^7.9.0",
     "d3-force-graph": "^0.4.3",
     "diagram-js": "^15.1.0",
@@ -40,6 +42,7 @@
     "solid-transition-group": "^0.2.3",
     "valibot": "1.0.0-beta.0",
     "xstate": "^5.18.2",
+    "zeebe-bpmn-moddle": "^1.6.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {

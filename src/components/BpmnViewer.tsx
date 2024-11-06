@@ -6,10 +6,19 @@ import Modeler from "bpmn-js/lib/Modeler";
 import {
   BpmnPropertiesPanelModule,
   BpmnPropertiesProviderModule,
+  CamundaPlatformPropertiesProviderModule,
   ZeebePropertiesProviderModule, // Camunda 8 provider
 } from "bpmn-js-properties-panel";
-import { Box } from "@suid/material";
+import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json'
 
+import { Box } from "@suid/material";
+      // Camunda 8 moddle extension
+import zeebeModdle from 'zeebe-bpmn-moddle/resources/zeebe';
+
+      // Camunda 8 behaviors
+import ZeebeBehaviorsModule from 'camunda-bpmn-js-behaviors/lib/camunda-cloud';
+
+      
 //import BpmnModeler from 'bpmn-js/lib/Modeler';
 function loadXml(xmlFilePath: string): Promise<string> {
   // Path to your XML file
@@ -23,16 +32,14 @@ function loadXml(xmlFilePath: string): Promise<string> {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlString, "application/xml");
 
-      // Now you can manipulate the xmlDoc (XML DOM)
-      console.log(xmlDoc.documentElement.nodeName); // Example: prints the root node name
-
+      
       // Example: Access specific elements from the XML
       const titleElements = xmlDoc.getElementsByTagName("title");
       if (titleElements.length > 0) {
         console.log(titleElements[0].textContent); // Prints content of first <title> element
       }
 
-      console.log(xmlString); // Print the XML string
+
       return xmlString;
     })
     .catch((error) => {
@@ -87,9 +94,11 @@ export function BpmnViewer({
 export function BpmnModeler({
   xmlPath,
   height,
+  camunda
 }: {
   xmlPath: string;
   height: number;
+  camunda?: boolean;
 }) {
   let container!: HTMLDivElement; // Use non-null assertion to indicate that this will be assigned
 
@@ -99,18 +108,39 @@ export function BpmnModeler({
     xmlPath: string,
     height: number
   ) => {
-    const modeler = new Modeler({
-      container: container,
-      propertiesPanel: { parent: "#properties" },
-      additionalModules: [
-        BpmnPropertiesPanelModule,
-        BpmnPropertiesProviderModule,
-        //ZeebePropertiesProviderModule
-      ],
-      keyboard: {
-        bindTo: window,
-      },
-    });
+    let modeler;
+    if (camunda) {
+
+      modeler = new Modeler({
+        container: container,
+        propertiesPanel: {
+          parent: '#properties'
+        },
+        additionalModules: [
+          BpmnPropertiesPanelModule,
+          BpmnPropertiesProviderModule,
+          CamundaPlatformPropertiesProviderModule,
+          //ZeebePropertiesProviderModule,
+          //ZeebeBehaviorsModule
+        ],
+        moddleExtensions: {
+          camunda: CamundaBpmnModdle,
+          //zeebe: zeebeModdle
+        }
+      });
+    } else {
+      modeler = new Modeler({
+        container: container,
+        propertiesPanel: { parent: "#properties" },
+        additionalModules: [
+          BpmnPropertiesPanelModule,
+          BpmnPropertiesProviderModule,
+        ],
+        keyboard: {
+          bindTo: window,
+        },
+      });
+    };
 
     const xml = await loadXml(xmlPath);
 
