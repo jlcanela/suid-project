@@ -116,13 +116,13 @@ const Report = () => {
       return (
 
           <>
-      {/* Render the report dynamically */}
-      <div id="report-content" innerHTML={report()}></div>
-
       {/* Button to trigger PDF generation */}
       <Button variant="contained" color="primary" onClick={printPDF}>
         Download PDF Report
       </Button>
+      {/* Render the report dynamically */}
+      <div id="report-content" innerHTML={report()}></div>
+
     </>
         )
  };

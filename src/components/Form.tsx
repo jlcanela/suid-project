@@ -4,10 +4,6 @@ import { onMount } from "solid-js";
 
 type OnSubmitCallback = (data: any, errors: any) => void;
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 // Define the createForm function with TypeScript
 export function createForm(container: HTMLElement, schema: Schema, data: any, onSubmit: OnSubmitCallback): void {
   const form = new Form({

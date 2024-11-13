@@ -24,6 +24,13 @@ import { SolidFlowSample } from "./pages/SolidFlow";
 import NetworkGraph from "./pages/NetworkGraph";
 import Report from "./pages/Report";
 import BPMNEditor from "./pages/BPMNEditor";
+import Pdf from "./pages/Pdf";
+
+import ToolingMenu from "./layouts/ToolingMenu";
+import Tooling from "./pages/tooling";
+import BPMN from "./pages/BPMN";
+import Forms from "./pages/Forms";
+import DMN from "./pages/DMN";
 
 function Layout(props) {
   return (
@@ -71,7 +78,14 @@ export function App() {
             <Route path="/solid-flow" component={SolidFlowSample} />
             <Route path="/network" component={NetworkGraph} />
             <Route path="/report" component={Report} />
+            <Route path="/pdf-report" component={Pdf} />
             <Route path="/bpmn-editor" component={BPMNEditor} />
+            <Route path="/tooling" component={ToolingMenu} >
+              <Route path="/" component={Tooling} />
+              <Route path="/bpmn" component={BPMN} />
+              <Route path="/forms" component={Forms} />
+              <Route path="/dmn" component={DMN} />
+            </Route>
           </Router>
       </QueryClientProvider>
   

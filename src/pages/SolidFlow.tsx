@@ -12,7 +12,7 @@ export const SolidFlowSample: Component = () => {
                 id: "node-1",
                 position: { x: 50, y: 100 },
                 data: {
-                    label: "Controller",
+                    label: "Toolbar",
                     content: (
                         <div style={{ display: "flex", "flex-direction": "column", gap: "12px" }}>
                             <button
@@ -28,8 +28,8 @@ export const SolidFlowSample: Component = () => {
                                                 label: "Node " + randomId.toString(),
                                                 content: <p>Simple Node with delete action</p>,
                                             },
-                                            inputs: 1,
-                                            outputs: 1,
+                                            inputs: 2,
+                                            outputs: 2,
                                             actions: { delete: true },
                                         },
                                     ]);
@@ -38,6 +38,17 @@ export const SolidFlowSample: Component = () => {
                                 Add node
                             </button>
                         </div>
+                    ),
+                },
+                inputs: 0,
+                outputs: 0,
+            },{
+                id: "node-2",
+                position: { x: 50, y: 230 },
+                data: {
+                    label: "Item",
+                    content: (
+                        <span>An item</span>
                     ),
                 },
                 inputs: 0,
