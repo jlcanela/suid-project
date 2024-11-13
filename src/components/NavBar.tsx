@@ -88,7 +88,13 @@ export function NavBar() {
           <Button color="inherit" href="/bpmn-editor">
             BPMN Editor
           </Button>
-            </>
+          <Button color="inherit" href="/pdf-report">
+            PDF Report
+          </Button>
+          <Button color="inherit" href="/tooling">
+            Tooling
+          </Button>
+                      </>
           )}
 
           <Box sx={{ flexGrow: 1 }} />

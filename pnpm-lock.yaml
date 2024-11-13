@@ -23,6 +23,15 @@ importers:
       '@modular-forms/solid':
         specifier: ^0.23.0
         version: 0.23.0(solid-js@1.9.1)(typescript@5.6.2)
+      '@myriaddreamin/typst-ts-renderer':
+        specifier: 0.5.0-rc8
+        version: 0.5.0-rc8
+      '@myriaddreamin/typst-ts-web-compiler':
+        specifier: 0.5.0-rc8
+        version: 0.5.0-rc8
+      '@myriaddreamin/typst.ts':
+        specifier: 0.5.0-rc8
+        version: 0.5.0-rc8(@myriaddreamin/typst-ts-renderer@0.5.0-rc8)(@myriaddreamin/typst-ts-web-compiler@0.5.0-rc8)
       '@solidjs/router':
         specifier: ^0.14.7
         version: 0.14.7(solid-js@1.9.1)
@@ -162,6 +171,12 @@ importers:
       vite-plugin-solid:
         specifier: ^2.10.2
         version: 2.10.2(@testing-library/jest-dom@6.6.3)(solid-js@1.9.1)(vite@5.4.8(@types/node@22.7.4))
+      vite-plugin-top-level-await:
+        specifier: ^1.4.4
+        version: 1.4.4(rollup@4.24.0)(vite@5.4.8(@types/node@22.7.4))
+      vite-plugin-wasm:
+        specifier: ^3.3.0
+        version: 3.3.0(vite@5.4.8(@types/node@22.7.4))
       vitest:
         specifier: ^2.1.4
         version: 2.1.4(@types/node@22.7.4)(jsdom@25.0.1)
@@ -1544,6 +1559,23 @@ packages:
   '@molt/types@0.2.0':
     resolution: {integrity: sha512-p6ChnEZDGjg9PYPec9BK6Yp5/DdSrYQvXTBAtgrnqX6N36cZy37ql1c8Tc5LclfIYBNG7EZp8NBcRTYJwyi84g==}
 
+  '@myriaddreamin/typst-ts-renderer@0.5.0-rc8':
+    resolution: {integrity: sha512-Ct7Sx0axOXt5rvOGrqcOQv4d+M0gWrgVIx766THzkKigru3oaogBRCCCrtsKSS+Ckp836LRvTEmzcwmJFwZtjw==}
+
+  '@myriaddreamin/typst-ts-web-compiler@0.5.0-rc8':
+    resolution: {integrity: sha512-nCuwwOt2iZwg4MmKgYKjs6qIIG9hergCMWTxT/IXrghKwMY2oaVOkFISiIxhqyRS1qpqgKjz8fUlik7SIBPgyg==}
+
+  '@myriaddreamin/typst.ts@0.5.0-rc8':
+    resolution: {integrity: sha512-am/z6SAa+dnex9zmdqK1uOyBdAT6xMpGVoh2vuvnzM3XoqhnyGRtphTdJqo/yCcdjG4/P3nzS2M9TlfSIAi3pw==}
+    peerDependencies:
+      '@myriaddreamin/typst-ts-renderer': ^0.5.0-rc8
+      '@myriaddreamin/typst-ts-web-compiler': ^0.5.0-rc8
+    peerDependenciesMeta:
+      '@myriaddreamin/typst-ts-renderer':
+        optional: true
+      '@myriaddreamin/typst-ts-web-compiler':
+        optional: true
+
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -1656,6 +1688,15 @@ packages:
 
   '@repeaterjs/repeater@3.0.6':
     resolution: {integrity: sha512-Javneu5lsuhwNCryN+pXH93VPQ8g0dBX7wItHFgYiwQmzE1sVdg5tWHiOgHywzL2W21XQopa7IwIEnNbmeUJYA==}
+
+  '@rollup/plugin-virtual@3.0.2':
+    resolution: {integrity: sha512-10monEYsBp3scM4/ND4LNH5Rxvh3e/cVeL3jWTgZ2SrQ+BmUoQcopVQvnaMcOnykb1VkxUFuDAN+0FnpTFRy2A==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
 
   '@rollup/rollup-android-arm-eabi@4.24.0':
     resolution: {integrity: sha512-Q6HJd7Y6xdB48x8ZNVDOqsbh2uByBhgK8PiQgPhwkIw/HC/YX5Ghq2mQY5sRMZWHb3VsFkWooUVOZHKr7DmDIA==}
@@ -1887,6 +1928,81 @@ packages:
     resolution: {integrity: sha512-IXbYxRZr4ie4iCYlqBM2znLV/RKrIT2zpaYYI5k1DbJHXVW5nXniCoii7BlvM2SonOKlsQ6R8CNI2X3bjAmoVQ==}
     peerDependencies:
       vite: ^5.0.0
+
+  '@swc/core-darwin-arm64@1.9.1':
+    resolution: {integrity: sha512-2/ncHSCdAh5OHem1fMITrWEzzl97OdMK1PHc9CkxSJnphLjRubfxB5sbc5tDhcO68a5tVy+DxwaBgDec3PXnOg==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@swc/core-darwin-x64@1.9.1':
+    resolution: {integrity: sha512-4MDOFC5zmNqRJ9RGFOH95oYf27J9HniLVpB1pYm2gGeNHdl2QvDMtx2QTuMHQ6+OTn/3y1BHYuhBGp7d405oLA==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@swc/core-linux-arm-gnueabihf@1.9.1':
+    resolution: {integrity: sha512-eVW/BjRW8/HpLe3+1jRU7w7PdRLBgnEEYTkHJISU8805/EKT03xNZn6CfaBpKfeAloY4043hbGzE/NP9IahdpQ==}
+    engines: {node: '>=10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@swc/core-linux-arm64-gnu@1.9.1':
+    resolution: {integrity: sha512-8m3u1v8R8NgI/9+cHMkzk14w87blSy3OsQPWPfhOL+XPwhyLPvat+ahQJb2nZmltjTgkB4IbzKFSfbuA34LmNA==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@swc/core-linux-arm64-musl@1.9.1':
+    resolution: {integrity: sha512-hpT0sQAZnW8l02I289yeyFfT9llGO9PzKDxUq8pocKtioEHiElRqR53juCWoSmzuWi+6KX7zUJ0NKCBrc8pmDg==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@swc/core-linux-x64-gnu@1.9.1':
+    resolution: {integrity: sha512-sGFdpdAYusk/ropHiwtXom2JrdaKPxl8MqemRv6dvxZq1Gm/GdmOowxdXIPjCgBGMgoXVcgNviH6CgiO5q+UtA==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@swc/core-linux-x64-musl@1.9.1':
+    resolution: {integrity: sha512-YtNLNwIWs0Z2+XgBs6+LrCIGtfCDtNr4S4b6Q5HDOreEIGzSvhkef8eyBI5L+fJ2eGov4b7iEo61C4izDJS5RA==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@swc/core-win32-arm64-msvc@1.9.1':
+    resolution: {integrity: sha512-qSxD3uZW2vSiHqUt30vUi0PB92zDh9bjqh5YKpfhhVa7h1vt/xXhlid8yMvSNToTfzhRrTEffOAPUr7WVoyQUA==}
+    engines: {node: '>=10'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@swc/core-win32-ia32-msvc@1.9.1':
+    resolution: {integrity: sha512-C3fPEwyX/WRPlX6zIToNykJuz1JkZX0sk8H1QH2vpnKuySUkt/Ur5K2FzLgSWzJdbfxstpgS151/es0VGAD+ZA==}
+    engines: {node: '>=10'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@swc/core-win32-x64-msvc@1.9.1':
+    resolution: {integrity: sha512-2XZ+U1AyVsOAXeH6WK1syDm7+gwTjA8fShs93WcbxnK7HV+NigDlvr4124CeJLTHyh3fMh1o7+CnQnaBJhlysQ==}
+    engines: {node: '>=10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@swc/core@1.9.1':
+    resolution: {integrity: sha512-OnPc+Kt5oy3xTvr/KCUOqE9ptJcWbyQgAUr1ydh9EmbBcmJTaO1kfQCxm/axzJi6sKeDTxL9rX5zvLOhoYIaQw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@swc/helpers': '*'
+    peerDependenciesMeta:
+      '@swc/helpers':
+        optional: true
+
+  '@swc/counter@0.1.3':
+    resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
+
+  '@swc/types@0.1.14':
+    resolution: {integrity: sha512-PbSmTiYCN+GMrvfjrMo9bdY+f2COnwbdnoMw7rqU/PI5jXpKjxOGZ0qqZCImxnT81NkNsKnmEpvu+hRXLBeCJg==}
 
   '@tanstack/query-core@5.59.0':
     resolution: {integrity: sha512-WGD8uIhX6/deH/tkZqPNcRyAhDUqs729bWKoByYHSogcshXfFbppOdTER5+qY7mFvu8KEFJwT0nxr8RfPTVh0Q==}
@@ -2987,6 +3103,9 @@ packages:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
 
+  idb@7.1.1:
+    resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
+
   ids@1.0.5:
     resolution: {integrity: sha512-XQ0yom/4KWTL29sLG+tyuycy7UmeaM/79GRtSJq6IG9cJGIPeBz5kwDCguie3TwxaMNIc3WtPi0cTa1XYHicpw==}
 
@@ -4041,6 +4160,10 @@ packages:
   utrie@1.0.2:
     resolution: {integrity: sha512-1MLa5ouZiOmQzUbjbu9VmjLzn1QLXBhwpUa7kdLUQK+KQ5KA9I1vk5U4YHe/X2Ch7PYnJfWuWT+VbuxbGwljhw==}
 
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
+
   valibot@0.42.1:
     resolution: {integrity: sha512-3keXV29Ar5b//Hqi4MbSdV7lfVp6zuYLZuA9V1PvQUsXqogr+u5lvLPLk3A4f74VUXDnf/JfWMN6sB+koJ/FFw==}
     peerDependencies:
@@ -4078,6 +4201,16 @@ packages:
     peerDependenciesMeta:
       '@testing-library/jest-dom':
         optional: true
+
+  vite-plugin-top-level-await@1.4.4:
+    resolution: {integrity: sha512-QyxQbvcMkgt+kDb12m2P8Ed35Sp6nXP+l8ptGrnHV9zgYDUpraO0CPdlqLSeBqvY2DToR52nutDG7mIHuysdiw==}
+    peerDependencies:
+      vite: '>=2.8'
+
+  vite-plugin-wasm@3.3.0:
+    resolution: {integrity: sha512-tVhz6w+W9MVsOCHzxo6SSMSswCeIw4HTrXEi6qL3IRzATl83jl09JVO1djBqPSwfjgnpVHNLYcaMbaDX5WB/pg==}
+    peerDependencies:
+      vite: ^2 || ^3 || ^4 || ^5
 
   vite@5.4.8:
     resolution: {integrity: sha512-FqrItQ4DT1NC4zCUqMB4c4AZORMKIa0m8/URVCZ77OZ/QSNeJ54bU1vrFADbDsuwfIPcgknRkmqakQcgnL4GiQ==}
@@ -6158,6 +6291,17 @@ snapshots:
     dependencies:
       ts-toolbelt: 9.6.0
 
+  '@myriaddreamin/typst-ts-renderer@0.5.0-rc8': {}
+
+  '@myriaddreamin/typst-ts-web-compiler@0.5.0-rc8': {}
+
+  '@myriaddreamin/typst.ts@0.5.0-rc8(@myriaddreamin/typst-ts-renderer@0.5.0-rc8)(@myriaddreamin/typst-ts-web-compiler@0.5.0-rc8)':
+    dependencies:
+      idb: 7.1.1
+    optionalDependencies:
+      '@myriaddreamin/typst-ts-renderer': 0.5.0-rc8
+      '@myriaddreamin/typst-ts-web-compiler': 0.5.0-rc8
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -6253,6 +6397,10 @@ snapshots:
   '@popperjs/core@2.11.8': {}
 
   '@repeaterjs/repeater@3.0.6': {}
+
+  '@rollup/plugin-virtual@3.0.2(rollup@4.24.0)':
+    optionalDependencies:
+      rollup: 4.24.0
 
   '@rollup/rollup-android-arm-eabi@4.24.0':
     optional: true
@@ -6495,6 +6643,58 @@ snapshots:
       vite: 5.4.8(@types/node@22.7.4)
     transitivePeerDependencies:
       - supports-color
+
+  '@swc/core-darwin-arm64@1.9.1':
+    optional: true
+
+  '@swc/core-darwin-x64@1.9.1':
+    optional: true
+
+  '@swc/core-linux-arm-gnueabihf@1.9.1':
+    optional: true
+
+  '@swc/core-linux-arm64-gnu@1.9.1':
+    optional: true
+
+  '@swc/core-linux-arm64-musl@1.9.1':
+    optional: true
+
+  '@swc/core-linux-x64-gnu@1.9.1':
+    optional: true
+
+  '@swc/core-linux-x64-musl@1.9.1':
+    optional: true
+
+  '@swc/core-win32-arm64-msvc@1.9.1':
+    optional: true
+
+  '@swc/core-win32-ia32-msvc@1.9.1':
+    optional: true
+
+  '@swc/core-win32-x64-msvc@1.9.1':
+    optional: true
+
+  '@swc/core@1.9.1':
+    dependencies:
+      '@swc/counter': 0.1.3
+      '@swc/types': 0.1.14
+    optionalDependencies:
+      '@swc/core-darwin-arm64': 1.9.1
+      '@swc/core-darwin-x64': 1.9.1
+      '@swc/core-linux-arm-gnueabihf': 1.9.1
+      '@swc/core-linux-arm64-gnu': 1.9.1
+      '@swc/core-linux-arm64-musl': 1.9.1
+      '@swc/core-linux-x64-gnu': 1.9.1
+      '@swc/core-linux-x64-musl': 1.9.1
+      '@swc/core-win32-arm64-msvc': 1.9.1
+      '@swc/core-win32-ia32-msvc': 1.9.1
+      '@swc/core-win32-x64-msvc': 1.9.1
+
+  '@swc/counter@0.1.3': {}
+
+  '@swc/types@0.1.14':
+    dependencies:
+      '@swc/counter': 0.1.3
 
   '@tanstack/query-core@5.59.0': {}
 
@@ -7808,6 +8008,8 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
+  idb@7.1.1: {}
+
   ids@1.0.5: {}
 
   ieee754@1.2.1: {}
@@ -8845,6 +9047,8 @@ snapshots:
     dependencies:
       base64-arraybuffer: 1.0.2
 
+  uuid@10.0.0: {}
+
   valibot@0.42.1(typescript@5.6.2):
     optionalDependencies:
       typescript: 5.6.2
@@ -8891,6 +9095,20 @@ snapshots:
       - canvas
       - supports-color
       - utf-8-validate
+
+  vite-plugin-top-level-await@1.4.4(rollup@4.24.0)(vite@5.4.8(@types/node@22.7.4)):
+    dependencies:
+      '@rollup/plugin-virtual': 3.0.2(rollup@4.24.0)
+      '@swc/core': 1.9.1
+      uuid: 10.0.0
+      vite: 5.4.8(@types/node@22.7.4)
+    transitivePeerDependencies:
+      - '@swc/helpers'
+      - rollup
+
+  vite-plugin-wasm@3.3.0(vite@5.4.8(@types/node@22.7.4)):
+    dependencies:
+      vite: 5.4.8(@types/node@22.7.4)
 
   vite@5.4.8(@types/node@22.7.4):
     dependencies:

@@ -17,6 +17,9 @@
     "@felte/solid": "^1.2.13",
     "@felte/validator-zod": "^1.0.17",
     "@modular-forms/solid": "^0.23.0",
+    "@myriaddreamin/typst-ts-renderer": "0.5.0-rc8",
+    "@myriaddreamin/typst-ts-web-compiler": "0.5.0-rc8",
+    "@myriaddreamin/typst.ts": "0.5.0-rc8",
     "@solidjs/router": "^0.14.7",
     "@suid/icons-material": "^0.8.1",
     "@suid/material": "^0.18.0",
@@ -65,6 +68,8 @@
     "typescript": "^5.6.2",
     "vite": "^5.4.8",
     "vite-plugin-solid": "^2.10.2",
+    "vite-plugin-top-level-await": "^1.4.4",
+    "vite-plugin-wasm": "^3.3.0",
     "vitest": "^2.1.4"
   }
 }
