@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Container } from "@suid/material";
 import PageHeader from "../components/PageHeader";
-import {BpmnModeler, BpmnViewer} from "../components/BpmnViewer";
-import { createSignal } from "solid-js";
+import {BpmnModeler, BpmnViewer, loadXml} from "../components/BpmnViewer";
+import { createResource, createSignal } from "solid-js";
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-js.css';
 
@@ -9,6 +9,9 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 
 export default function BPMNEditor() {
   const [activeTab, setActiveTab] = createSignal(0);
+
+  const [xml] = createResource(() => loadXml("./pizza-collaboration.bpmn"));
+  const [processDiagram] = createResource(() => loadXml("./process-diagram.bpmn"));
 
   const tabs = ["Viewer", "Editor", "Camunda8 Editor"];
 
@@ -36,9 +39,9 @@ export default function BPMNEditor() {
     
     {/* Content for each tab */}
     <Box sx={{ padding: 3 }}>
-      {activeTab() === 0 && <div id="canvas" class="with-diagram"><BpmnViewer xmlPath="./pizza-collaboration.bpmn" height={600} /></div>}
-      {activeTab() === 1 && <div id="canvas" style="background-color: light-gray"><BpmnModeler xmlPath="./pizza-collaboration.bpmn" height={800}/></div>}
-      {activeTab() === 2 && <div id="canvas" style="background-color: light-gray"><BpmnModeler xmlPath="./process-diagram.bpmn" height={800} camunda={true}/></div>}
+      {activeTab() === 0 && <div id="canvas" class="with-diagram"><BpmnViewer xml={xml()} height={600} /></div>}
+      {activeTab() === 1 && <div id="canvas" style="background-color: light-gray; height: 700px"><BpmnModeler xml={xml()} /></div>}
+      {activeTab() === 2 && <div id="canvas" style="background-color: light-gray; height: 700px"><BpmnModeler xml={processDiagram()} camunda={true}/></div>}
     </Box>
   </Box>
     // <Container>

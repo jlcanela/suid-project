@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import MenuIcon from "@suid/icons-material/Menu";
 import AccountCircle from "@suid/icons-material/AccountCircle";
 import {
@@ -12,7 +12,35 @@ import {
   MenuItem,
 } from "@suid/material";
 import { useAuth0 } from "../auth";
-import { useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate } from "@solidjs/router";
+
+// NavButton.tsx
+interface NavButtonProps {
+  href: string;
+  label: string;
+}
+
+const NavButton: Component<NavButtonProps> = (props) => {
+  const location = useLocation();
+  const isActive = () => location.pathname === props.href;
+
+  return (
+    <Button
+      color="inherit"
+      href={props.href}
+      sx={{
+        bgcolor: isActive() ? "rgba(255, 255, 255, 0.12)" : "transparent",
+        "&:hover": {
+          bgcolor: isActive()
+            ? "rgba(255, 255, 255, 0.2)"
+            : "rgba(255, 255, 255, 0.08)",
+        },
+      }}
+    >
+      {props.label}
+    </Button>
+  );
+};
 
 export function NavBar() {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
@@ -43,6 +71,26 @@ export function NavBar() {
     logout();
   };
 
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const navItems = [
+    { href: "/projects", label: "Projects" },
+    { href: "/parties", label: "Parties" },
+    { href: "/admin", label: "Administration" },
+    { href: "/formjs", label: "FormJs" },
+    { href: "/solid-flow", label: "GraphEditor" },
+    { href: "/network", label: "Network" },
+    { href: "/report", label: "Report" },
+    { href: "/bpmn-editor", label: "BPMN Editor" },
+    { href: "/pdf-report", label: "PDF Report" },
+    { href: "/tooling", label: "Tooling" },
+    { href: "/business-editor", label: "Business Editor" },
+  ];
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -59,43 +107,12 @@ export function NavBar() {
           <Typography variant="h6" component="div" sx={{ mr: 2 }}>
             MainApp
           </Typography>
-          <Button color="inherit" href="/">
-            Home
-          </Button>
-          { isAuthenticated() && (
-            <>
-          <Button color="inherit" href="/projects">
-            Projects
-          </Button>
-          <Button color="inherit" href="/parties">
-            Parties
-          </Button>
-          <Button color="inherit" href="/admin">
-            Administration
-          </Button>
-          <Button color="inherit" href="/formjs">
-            FormJs
-          </Button>
-          <Button color="inherit" href="/solid-flow">
-            GraphEditor
-          </Button>
-          <Button color="inherit" href="/network">
-            Network
-          </Button>
-          <Button color="inherit" href="/report">
-            Report
-          </Button>
-          <Button color="inherit" href="/bpmn-editor">
-            BPMN Editor
-          </Button>
-          <Button color="inherit" href="/pdf-report">
-            PDF Report
-          </Button>
-          <Button color="inherit" href="/tooling">
-            Tooling
-          </Button>
-                      </>
-          )}
+          <NavButton href="/" label="Home" />
+
+          {isAuthenticated() &&
+            navItems.map((item) => (
+              <NavButton href={item.href} label={item.label} />
+            ))}
 
           <Box sx={{ flexGrow: 1 }} />
           <div>

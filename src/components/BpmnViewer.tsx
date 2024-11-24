@@ -1,6 +1,6 @@
 import { Form, Schema, ViewerCommands } from "@bpmn-io/form-js";
 import { keyboard } from "@testing-library/user-event/dist/cjs/keyboard/index.js";
-import { onMount } from "solid-js";
+import { Accessor, createEffect, onMount, Setter } from "solid-js";
 import Viewer from "bpmn-js/lib/Viewer";
 import Modeler from "bpmn-js/lib/Modeler";
 import {
@@ -13,14 +13,14 @@ import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json'
 
 import { Box } from "@suid/material";
       // Camunda 8 moddle extension
-import zeebeModdle from 'zeebe-bpmn-moddle/resources/zeebe';
+//import zeebeModdle from 'zeebe-bpmn-moddle/resources/zeebe';
 
       // Camunda 8 behaviors
-import ZeebeBehaviorsModule from 'camunda-bpmn-js-behaviors/lib/camunda-cloud';
+//import ZeebeBehaviorsModule from 'camunda-bpmn-js-behaviors/lib/camunda-cloud';
 
       
 //import BpmnModeler from 'bpmn-js/lib/Modeler';
-function loadXml(xmlFilePath: string): Promise<string> {
+export function loadXml(xmlFilePath: string): Promise<string> {
   // Path to your XML file
   //const xmlFilePath = './PartyDetailEdit.xml';
 
@@ -39,7 +39,6 @@ function loadXml(xmlFilePath: string): Promise<string> {
         console.log(titleElements[0].textContent); // Prints content of first <title> element
       }
 
-
       return xmlString;
     })
     .catch((error) => {
@@ -53,10 +52,10 @@ export function hasErrors(errors: Record<string, any>): boolean {
 }
 
 export function BpmnViewer({
-  xmlPath,
+  xml,
   height,
 }: {
-  xmlPath: string;
+  xml: string;
   height: number;
 }) {
   let container!: HTMLDivElement; // Use non-null assertion to indicate that this will be assigned
@@ -64,24 +63,32 @@ export function BpmnViewer({
   // Define the createForm function with TypeScript
   const createBpmnViewer = async (
     container: HTMLElement,
-    xmlPath: string,
+    xml: string,
     height: number
   ) => {
     const viewer = new Viewer({
       container: container,
       height: height,
+      eventBus: {
+        eventListenerOptions: {
+          passive: true
+        }
+      }    
     });
 
-    const xml = await loadXml(xmlPath);
-
-    await viewer.importXML(xml);
-
-    viewer.get("canvas").zoom("fit-viewport");
+    try {
+      await viewer.importXML(xml);
+      viewer.get('canvas').zoom('fit-viewport');
+      return viewer;
+    } catch (err) {
+      console.error('Error importing XML:', err);
+      throw err;
+    }
   };
 
   onMount(() => {
     // Use the createForm method
-    createBpmnViewer(container, xmlPath, height);
+    createBpmnViewer(container, xml, height);
   });
 
   return (
@@ -91,75 +98,90 @@ export function BpmnViewer({
   );
 }
 
-export function BpmnModeler({
-  xmlPath,
-  height,
-  camunda
-}: {
-  xmlPath: string;
-  height: number;
-  camunda?: boolean;
+export function BpmnModeler(props: {
+  xml?: string,
+  camunda?: boolean,
+  updateXml?: (string) => void
 }) {
   let container!: HTMLDivElement; // Use non-null assertion to indicate that this will be assigned
 
   // Define the createForm function with TypeScript
   const createBpmnModeler = async (
     container: HTMLElement,
-    xmlPath: string,
-    height: number
+    xml: string,
+    
   ) => {
     let modeler;
-    if (camunda) {
 
+    const baseConfig = {
+      container: container,
+      propertiesPanel: {
+        parent: '#properties'
+      },
+      keyboard: {
+        bindTo: window
+      },
+      // Add event bus configuration
+      eventBus: {
+        eventListenerOptions: {
+          passive: true
+        }
+      }
+    };
+  
+    if (props.camunda) {
       modeler = new Modeler({
-        container: container,
-        propertiesPanel: {
-          parent: '#properties'
-        },
+        ...baseConfig,
         additionalModules: [
           BpmnPropertiesPanelModule,
           BpmnPropertiesProviderModule,
-          CamundaPlatformPropertiesProviderModule,
-          //ZeebePropertiesProviderModule,
-          //ZeebeBehaviorsModule
+          CamundaPlatformPropertiesProviderModule
         ],
         moddleExtensions: {
-          camunda: CamundaBpmnModdle,
-          //zeebe: zeebeModdle
+          camunda: CamundaBpmnModdle
         }
       });
     } else {
       modeler = new Modeler({
-        container: container,
-        propertiesPanel: { parent: "#properties" },
+        ...baseConfig,
         additionalModules: [
           BpmnPropertiesPanelModule,
-          BpmnPropertiesProviderModule,
-        ],
-        keyboard: {
-          bindTo: window,
-        },
+          BpmnPropertiesProviderModule
+        ]
       });
-    };
+    }
 
-    const xml = await loadXml(xmlPath);
-
-    await modeler.importXML(xml);
+    createEffect(async () => {
+      if (props && props.xml && props.xml !== "") {
+        // Handle XML updates here
+        await modeler.importXML(props.xml);
+      } else {
+        await modeler.createDiagram();  
+      }
+    });
 
     modeler.get("canvas").zoom("fit-viewport");
+
+    props.updateXml && modeler.on('commandStack.changed', function() {
+      Promise.resolve()
+        .then(() => modeler.saveXML({ format: true }))
+        .then((result) => {
+          props.updateXml(result.xml)
+        });
+    });
   };
 
   onMount(() => {
-    // Use the createForm method
-    createBpmnModeler(container, xmlPath, height);
+    createBpmnModeler(container, props.xml);
   });
 
   return (
     <Box
       sx={{
         display: "flex",
-        width: "80%",
-        height: `${height}px`,
+        width: "100%",
+        height: '100%',
+        //height: `${height}px`,
         margin: "0 auto",
       }}
     >
@@ -170,10 +192,10 @@ export function BpmnModeler({
           ref={(el) => (container = el as HTMLDivElement)}
           id="canvas"
           style={{
-            flexBasis: "60%",
+            "flex-basis": "60%",
             border: "1px solid black",
             height: "100%",
-            backgroundColor: "lightgray", // Ensure background color is applied here
+            "background-color": "lightgray", // Ensure background color is applied here
           }}
         ></div>
       </div>
@@ -181,16 +203,12 @@ export function BpmnModeler({
       <div
         id="properties"
         style={{
-          flexBasis: "40%",
+          "flex-basis": "40%",
           border: "1px solid grey",
           width:"30%",
           height: "100%",
         }}
       ></div>
     </Box>
-
-    // <div>
-    //   <div ref={(el) => (container = el as HTMLDivElement)}></div>
-    // </div>
   );
 }
