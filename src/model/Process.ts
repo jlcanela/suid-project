@@ -4,15 +4,27 @@ import { makePersisted } from "@solid-primitives/storage";
 import { Accessor, createResource, createSignal, ResourceReturn, Setter, Signal } from "solid-js";
 import { defaultXml, importZip } from "./zip";
 
+export interface TaskInfo {
+  id: string;
+  type: string;
+  name: string;
+  input: Accessor<string>; 
+  setInput: (string) => void;
+  output: Accessor<string>; 
+  setOutput: (string) => void;
+}
+
 export interface ProcessInfo {
     name: string;
     content: string;
 }
 
 export class ProcessModel {
-    private processes: [Accessor<Map<string, ProcessInfo>>, Setter<Map<string, ProcessInfo>>];
-    private currentProcess: [Accessor<string>, Setter<string>];
+    private _processes: [Accessor<Map<string, ProcessInfo>>, Setter<Map<string, ProcessInfo>>];
+    private _currentProcess: [Accessor<string>, Setter<string>];
     private _xml: Accessor<string>;
+    selectedTask: Accessor<TaskInfo>;
+    setSelectedTask: Setter<TaskInfo>;
   
     constructor() {
       const [processes, setProcesses] = makePersisted(
@@ -26,7 +38,7 @@ export class ProcessModel {
             new Map<string, ProcessInfo>(JSON.parse(str)),
         }
       );
-      this.processes = [processes, setProcesses];
+      this._processes = [processes, setProcesses];
 
       const [currentProcess, setCurrentProcess] = makePersisted(
         createSignal<string>(""), 
@@ -37,7 +49,7 @@ export class ProcessModel {
           deserialize: JSON.parse,
         }
       );
-      this.currentProcess = [currentProcess, setCurrentProcess];
+      this._currentProcess = [currentProcess, setCurrentProcess];
 
       const [_xml, { mutate, refetch }] = createResource(this.getCurrentProcess(), (name) => {
         return this.getProcessXml(name);
@@ -45,7 +57,9 @@ export class ProcessModel {
 
       this._xml = _xml;
 
-  
+      const [selectedTask, setSelectedTask] = createSignal<TaskInfo | undefined>(undefined);
+      this.selectedTask =  selectedTask;
+      this.setSelectedTask = setSelectedTask;  
   }
 
   xml() {    
@@ -53,19 +67,19 @@ export class ProcessModel {
   }
 
   getProcesses() {
-    return this.processes[0];
+    return this._processes[0];
   }
 
   setProcesses(processes: Map<string, ProcessInfo>) {
-    this.processes[1](processes);
+    this._processes[1](processes);
   }
 
   getCurrentProcess() {
-    return this.currentProcess?.[0];
+    return this._currentProcess?.[0];
   }
 
   setCurrentProcess(process: string) {
-    this.currentProcess[1](process);
+    this._currentProcess[1](process);
   }
 
   addProcess(processName: string) {
@@ -99,4 +113,5 @@ export class ProcessModel {
       this.setCurrentProcess(map.keys().next().value);
     }
   };
+
 }

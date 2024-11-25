@@ -3,7 +3,7 @@ import { createZipFile, importZip } from "../../model/zip";
 import { Box, Container, Paper, Typography } from "@suid/material";
 import ProcessList from "./ProcessList";
 import { BpmnModeler } from "../../components/BpmnViewer";
-import TaskDetail from "./TaskDetail";
+import DataConfiguration from "./DataConfiguration";
 
 // components/BusinessEditor.tsx
 export default function BusinessEditor() {
@@ -56,12 +56,12 @@ export default function BusinessEditor() {
             </Typography>
             <Box sx={{ height: "95%", border: "1px dashed #ccc" }}>
               {model.xml() && (
-                <BpmnModeler xml={model.xml()()} updateXml={updateXml} />
+                <BpmnModeler xml={model.xml()()} updateXml={updateXml} updateSelection={model.setSelectedTask} />
               )}
             </Box>
           </Paper>
 
-          <TaskDetail />
+          <DataConfiguration task={model.selectedTask}/>
         </Box>
       </Box>
     </Container>

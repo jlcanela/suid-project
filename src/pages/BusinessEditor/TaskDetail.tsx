@@ -1,6 +1,13 @@
 import { Box, Button, Paper, Typography } from "@suid/material";
+import { ShapeInfo } from "../../components/BpmnViewer";
+import { Accessor, createEffect } from "solid-js";
 
-export default function TaskDetail() {
+interface TaskDetailProps {
+  task: Accessor<ShapeInfo>;
+}
+
+export default function TaskDetail(props: TaskDetailProps) {
+
   return (
     <Paper sx={{ p: 2 }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
@@ -53,7 +60,7 @@ export default function TaskDetail() {
             justifyContent: "center",
           }}
         >
-          Step
+          {props.task()?.name || 'unknown'}
         </Paper>
 
         {/* Output boxes */}

@@ -37,14 +37,12 @@ async function setupCompiler() {
 
   // Create a new compiler builder
   const builder = new TypstCompilerBuilder();
-  console.log("setupCompiler");
 
   // Set up a dummy access model for basic usage
   await builder.set_dummy_access_model();
 
   // Build the compiler
   const compiler = await builder.build();
-  console.log("compiler", compiler);
   return compiler;
 }
 

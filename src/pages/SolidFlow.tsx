@@ -58,11 +58,6 @@ export const SolidFlowSample: Component = () => {
         setNodes([...nodes(), ...initialNodes]);
     });
 
-    createEffect(() => {
-        console.log("nodes", nodes());
-        console.log("edges", edges());
-    });
-
     return (
         <div class={styles.main}>
             <SolidFlow

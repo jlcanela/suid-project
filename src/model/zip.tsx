@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { ProcessInfo } from "./ProcessRepository";
+import { ProcessInfo } from "./Process";
 
 export async function createZipFile(
   map: Map<string, ProcessInfo>
@@ -36,14 +36,16 @@ export async function importZip(file: File): Promise<Map<string, ProcessInfo>> {
     const promises = Object.keys(zip.files).map(async (filename) => {
       const content = await zip.file(filename)?.async("string");
       if (content) {
-        fileMap.set(filename, {
-          name: filename.replace(".bpmn", ""),
+        const name = filename.replace(".bpmn", "");
+        fileMap.set(name, {
+          name: name,
           content: content,
         });
       }
     });
 
     await Promise.all(promises);
+    console.log("filemap", fileMap);
     return fileMap;
   } catch (error) {
     console.error("Failed to process zip file:", error);
